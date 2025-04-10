@@ -1,649 +1,913 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TPE by NSRM Groupe</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, white, #bcbcbc, orange);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      overflow-x: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPE by NSRM Groupe</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom right, white, #bcbcbc, orange);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            overflow-x: hidden;
+        }
 
-    /* En-tête spécifique à la page de connexion */
-    .login-header {
-      margin-top: 20px;
-      text-align: center;
-    }
-    .login-header img {
-      width: 180px;
-    }
-    .login-header p {
-      margin-top: 10px;
-      color: #080808;
-      font-size: 18px;
-    }
+        /* Styles des en-têtes */
+        .login-header, .main-header {
+            margin-top: 20px;
+            text-align: center;
+        }
 
-    /* En-tête simplifié pour les autres pages */
-    .main-header {
-      margin-top: 20px;
-      text-align: center;
-      display: none;
-    }
-    .main-header img {
-      width: 180px;
-    }
-    .main-header p {
-      margin-top: 5px;
-      color: #080808;
-      font-size: 14px;
-    }
+        .login-header img, .main-header img {
+            width: 180px;
+        }
 
-    .honeycomb {
-      margin-top: 80px;
-      width: 300px;
-      padding: 30px;
-      background: linear-gradient(to bottom, orange, #444);
-      border-radius: 20% 20% 0 0 / 30% 30% 0 0;
-      box-shadow: 0 0 20px rgba(255, 165, 0, 0.7), 0 0 40px rgba(100, 100, 100, 0.7);
-      text-align: center;
-    }
+        .login-header p {
+            margin-top: 10px;
+            color: #080808;
+            font-size: 18px;
+        }
 
-    .honeycomb h2 {
-      margin-bottom: 20px;
-      color: white;
-      font-size: 24px;
-    }
+        .main-header {
+            display: none;
+        }
 
-    input[type="text"], input[type="password"], textarea {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      outline: none;
-    }
+        .main-header p {
+            margin-top: 5px;
+            color: #080808;
+            font-size: 14px;
+        }
 
-    textarea {
-      height: 100px;
-      resize: vertical;
-    }
+        /* Page de connexion */
+        .honeycomb {
+            margin-top: 80px;
+            width: 300px;
+            padding: 30px;
+            background: linear-gradient(to bottom, orange, #444);
+            border-radius: 20% 20% 0 0 / 30% 30% 0 0;
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.7), 0 0 40px rgba(100, 100, 100, 0.7);
+            text-align: center;
+        }
 
-    button {
-      margin-top: 15px;
-      padding: 12px 24px;
-      background-color: #ff6600;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+        .honeycomb h2 {
+            margin-bottom: 20px;
+            color: white;
+            font-size: 24px;
+        }
 
-    button:hover {
-      background-color: #e65c00;
-    }
+        /* Formulaires et inputs */
+        input[type="text"], 
+        input[type="password"], 
+        textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
 
-    .dashboard {
-      display: none;
-      margin-top: 80px;
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
 
-    .service-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-    }
+        /* Boutons */
+        button {
+            margin-top: 15px;
+            padding: 12px 24px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-    .hex-button {
-      width: 120px;
-      height: 104px;
-      background: linear-gradient(to bottom, orange, #555);
-      clip-path: polygon(
-        50% 0%, 
-        93% 25%, 
-        93% 75%, 
-        50% 100%, 
-        7% 75%, 
-        7% 25%
-      );
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(255,165,0,0.7);
-    }
+        button:hover {
+            background-color: #e65c00;
+        }
 
-    .hex-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 165, 0, 1);
-    }
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            margin-top: 80px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .service-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
 
-    /* Bouton de déconnexion UNIQUEMENT sur la page d'accueil */
-    #logoutBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #333;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 165, 0, 0.7);
-      transition: 0.3s ease;
-      z-index: 999;
-      display: none;
-    }
+        .hex-button {
+            width: 120px;
+            height: 104px;
+            background: linear-gradient(to bottom, orange, #555);
+            clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255,165,0,0.7);
+        }
 
-    #logoutBtn:hover {
-      background-color: #555;
-    }
+        .hex-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 165, 0, 1);
+        }
 
-    /* Pages des services */
-    .service-page {
-      display: none;
-      width: 90%;
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.5s ease-in-out;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .service-page h2 {
-      color: #ff6600;
-      margin-bottom: 20px;
-    }
+        /* Bouton de déconnexion */
+        #logoutBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.7);
+            transition: 0.3s ease;
+            z-index: 999;
+            display: none;
+        }
 
-    .tpe-item, .invoice-item, .support-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 15px;
-      margin: 10px 0;
-      background: #f5f5f5;
-      border-radius: 8px;
-      border-left: 4px solid #ff6600;
-    }
+        #logoutBtn:hover {
+            background-color: #555;
+        }
 
-    .status {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
+        /* Pages des services */
+        .service-page {
+            display: none;
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-    .status.connected {
-      background-color: #4CAF50;
-    }
+        .service-page h2 {
+            color: #ff6600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    .status.disconnected {
-      background-color: #F44336;
-    }
+        /* Items de liste */
+        .tpe-item, 
+        .invoice-item, 
+        .support-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin: 10px 0;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #ff6600;
+        }
 
-    .toggle-btn {
-      padding: 5px 10px;
-      background-color: #ff6600;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+        .status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
 
-    .toggle-btn.off {
-      background-color: #777;
-    }
+        .status.connected {
+            background-color: #4CAF50;
+        }
 
-    .download-btn, .call-btn, .send-btn {
-      padding: 5px 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+        .status.disconnected {
+            background-color: #F44336;
+        }
 
-    .call-btn {
-      background-color: #2196F3;
-    }
+        /* Boutons spécifiques */
+        .toggle-btn {
+            padding: 5px 10px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    .back-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #333;
-      color: white;
-    }
+        .toggle-btn.off {
+            background-color: #777;
+        }
 
-    /* Fil d'actualité - Défilement infini */
-    .news-container {
-      position: fixed;
-      bottom: 70px; /* Positionné en haut à 12px du bord */
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 8px 0;
-      font-size: 34px;
-      display: none;
-      overflow: hidden;
-      z-index: 100; /* Assure qu'il est au-dessus du contenu */
-    }
+        .download-btn, 
+        .send-btn {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    .news-ticker {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%; /* Démarre complètement à droite */
-      animation: ticker 40s linear infinite;
-    }
+        .call-btn {
+            padding: 5px 10px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    .news-item {
-      display: inline-block;
-      margin-right: 60px;
-    }
+        /* Fil d'actualité */
+        .news-container {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 0;
+            font-size: 34px;
+            display: none;
+            overflow: hidden;
+            z-index: 100;
+        }
 
-    /* Formulaire de contact */
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .news-ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker 40s linear infinite;
+        }
 
-    .contact-form label {
-      align-self: flex-start;
-      margin-left: 10%;
-      margin-top: 10px;
-      font-weight: bold;
-    }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
 
-    /* Modal de confirmation */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
+        .news-item {
+            display: inline-block;
+            margin-right: 60px;
+        }
 
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-    }
+        /* Formulaire de contact */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    .modal-close {
-      margin-top: 20px;
-      padding: 8px 16px;
-      background: #ff6600;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
+        .contact-form label {
+            align-self: flex-start;
+            margin-left: 10%;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-close {
+            margin-top: 20px;
+            padding: 8px 16px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Modal d'urgence */
+        .urgent-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .urgent-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .urgent-modal-content button {
+            margin: 10px 5px;
+            padding: 10px 15px;
+            min-width: 120px;
+        }
+
+        /* RDV Container */
+        .rdv-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .rdv-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .rdv-slot {
+            padding: 10px;
+            background: #e9e9e9;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .rdv-slot:hover {
+            background: #ddd;
+        }
+
+        .rdv-slot.selected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .confirm-rdv {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .rdv-confirmation {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
 </head>
 <body>
+    <!-- En-tête de la page de connexion -->
+    <header id="loginHeader" class="login-header">
+        <img src="tep.png" alt="Logo TPE by NSRM Groupe">
+        <p>Une solution innovante pour vos paiements professionnels <br> By NSRM</p>
+    </header>
 
-  <!-- En-tête de la page de connexion -->
-  <div id="loginHeader" class="login-header">
-    <img src="tep.png" alt="Logo TPE by NSRM Groupe">
-    <p>Une solution innovante pour vos paiements professionnels <br> By NSRM</p>
-  </div>
+    <!-- En-tête simplifié pour les autres pages -->
+    <header id="mainHeader" class="main-header">
+        <img src="tep.png" alt="Logo TPE by NSRM Groupe">
+        <p>By NSRM</p>
+    </header>
 
-  <!-- En-tête simplifié pour les autres pages -->
-  <div id="mainHeader" class="main-header">
-    <img src="tep.png" alt="Logo TPE by NSRM Groupe">
-    <p>By NSRM</p>
-  </div>
-
-  <!-- Fil d'actualité (positionné en haut) -->
-  <div id="newsContainer" class="news-container">
-    <div class="news-ticker" id="newsTicker">
-      <!-- Les actualités seront injectées ici -->
+    <!-- Fil d'actualité -->
+    <div id="newsContainer" class="news-container">
+        <div class="news-ticker" id="newsTicker"></div>
     </div>
-  </div>
 
-  <!-- PAGE DE CONNEXION -->
-  <div id="loginPage" class="honeycomb">
-    <h2>Bienvenue</h2>
-    <input type="text" id="username" placeholder="Nom d'utilisateur" />
-    <br>
-    <input type="password" id="password" placeholder="Mot de passe" />
-    <br>
-    <button onclick="login()">Entrer</button>
-  </div>
+    <!-- Page de connexion -->
+    <main id="loginPage" class="honeycomb">
+        <h2>Bienvenue</h2>
+        <input type="text" id="username" placeholder="Nom d'utilisateur" required>
+        <input type="password" id="password" placeholder="Mot de passe" required>
+        <button onclick="login()">Entrer</button>
+    </main>
 
-  <!-- PAGE APRÈS CONNEXION -->
-  <div id="dashboardPage" class="dashboard">
-    <h2>Services disponibles</h2>
-    <div class="service-buttons">
-      <div class="hex-button" onclick="showService('service1')">TPE</div>
-      <div class="hex-button" onclick="showService('service2')">Factures</div>
-      <div class="hex-button" onclick="showService('service3')">Assistance</div>
-      <div class="hex-button" onclick="showService('service4')">Contact</div>
+    <!-- Tableau de bord -->
+    <main id="dashboardPage" class="dashboard">
+        <h2>Services disponibles</h2>
+        <div class="service-buttons">
+            <div class="hex-button" onclick="showService('service1')">TPE</div>
+            <div class="hex-button" onclick="showService('service2')">Factures</div>
+            <div class="hex-button" onclick="showService('service3')">Assistance</div>
+            <div class="hex-button" onclick="showService('service4')">Contact</div>
+        </div>
+    </main>
+
+    <!-- Pages de services -->
+    <section id="service1" class="service-page">
+        <h2>Gestion des TPE</h2>
+        <div id="tpeList"></div>
+        <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
+    </section>
+
+    <section id="service2" class="service-page">
+        <h2>Factures des 12 derniers mois</h2>
+        <div id="invoiceList"></div>
+        <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
+    </section>
+
+    <section id="service3" class="service-page">
+        <h2>Assistance technique</h2>
+        <div id="supportList"></div>
+        <div id="rdvContainer" class="rdv-container">
+            <h3>Choisissez un créneau :</h3>
+            <div class="rdv-slots" id="rdvSlots"></div>
+            <div id="rdvConfirmation" class="rdv-confirmation"></div>
+            <button class="confirm-rdv" onclick="confirmRdv()">Confirmer le RDV</button>
+        </div>
+        <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
+    </section>
+
+    <section id="service4" class="service-page">
+        <h2>Contactez-nous</h2>
+        <form class="contact-form" onsubmit="sendContactForm(); return false;">
+            <label for="contact-name">Votre nom :</label>
+            <input type="text" id="contact-name" placeholder="Votre nom complet" required>
+            
+            <label for="contact-email">Votre email :</label>
+            <input type="email" id="contact-email" placeholder="Votre adresse email" required>
+            
+            <label for="contact-subject">Sujet :</label>
+            <input type="text" id="contact-subject" placeholder="Objet de votre message" required>
+            
+            <label for="contact-message">Votre message :</label>
+            <textarea id="contact-message" placeholder="Décrivez votre question ou demande" required></textarea>
+            
+            <button type="submit" class="send-btn">Envoyer le message</button>
+        </form>
+        <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
+    </section>
+
+    <!-- Modals -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <h3>Message envoyé avec succès !</h3>
+            <p>Nous avons bien reçu votre demande et vous répondrons dans les plus brefs délais.</p>
+            <button class="modal-close" onclick="closeModal()">Fermer</button>
+        </div>
     </div>
-  </div>
 
-  <!-- PAGE SERVICE 1 - TPE -->
-  <div id="service1" class="service-page">
-    <h2>Gestion des TPE</h2>
-    <div id="tpeList">
-      <!-- Les TPE seront générés dynamiquement -->
+    <div id="urgentCallModal" class="urgent-modal">
+        <div class="urgent-modal-content">
+            <h3>Appel urgent ?</h3>
+            <p>Cet appel nécessite-t-il une intervention immédiate ?</p>
+            <div>
+                <button onclick="handleUrgentCall(true)">Oui, appeler maintenant</button>
+                <button onclick="handleUrgentCall(false)">Non, prendre RDV</button>
+            </div>
+        </div>
     </div>
-    <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
-  </div>
 
-  <!-- PAGE SERVICE 2 - FACTURES -->
-  <div id="service2" class="service-page">
-    <h2>Factures des 12 derniers mois</h2>
-    <div id="invoiceList">
-      <!-- Les factures seront générées dynamiquement -->
-    </div>
-    <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
-  </div>
+    <!-- Bouton de déconnexion -->
+    <button id="logoutBtn" onclick="logout()">Déconnexion</button>
 
-  <!-- PAGE SERVICE 3 - ASSISTANCE -->
-  <div id="service3" class="service-page">
-    <h2>Assistance technique</h2>
-    <div id="supportList">
-      <!-- Les contacts seront générés dynamiquement -->
-    </div>
-    <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
-  </div>
+    <script>
+        // Variables globales
+        let currentSupportNumber = '';
+        let selectedRdvSlot = null;
 
-  <!-- PAGE SERVICE 4 - CONTACT -->
-  <div id="service4" class="service-page">
-    <h2>Contactez-nous</h2>
-    <div class="contact-form">
-      <label for="contact-name">Votre nom :</label>
-      <input type="text" id="contact-name" placeholder="Votre nom complet">
-      
-      <label for="contact-email">Votre email :</label>
-      <input type="text" id="contact-email" placeholder="Votre adresse email">
-      
-      <label for="contact-subject">Sujet :</label>
-      <input type="text" id="contact-subject" placeholder="Objet de votre message">
-      
-      <label for="contact-message">Votre message :</label>
-      <textarea id="contact-message" placeholder="Décrivez votre question ou demande"></textarea>
-      
-      <button class="send-btn" onclick="sendContactForm()">Envoyer le message</button>
-    </div>
-    <button class="back-btn" onclick="backToDashboard()">Retour à l'accueil</button>
-  </div>
+        // Données des actualités
+        const newsItems = [
+            "15/06/2025 - Nouvelle mise à jour des terminaux TPE disponible",
+            "01/06/2025 - WebSite developed By SARMOUME_NasrEddine",
+            "20/05/2025 - Nouvelle offre commerciale pour les commerçants",
+            "10/05/2025 - Nos équipes seront présentes au Salon des Commerçants le 25 mai",
+            "28/04/2025 - Mise en place d'un nouveau service client 24/7",
+            "15/04/2025 - Nouveaux tarifs avantageux pour les petits commerces",
+            "01/04/2025 - Application mobile mise à jour avec nouvelles fonctionnalités"
+        ];
 
-  <!-- Modal de confirmation -->
-  <div id="confirmationModal" class="modal">
-    <div class="modal-content">
-      <h3>Message envoyé avec succès !</h3>
-      <p>Nous avons bien reçu votre demande et vous répondrons dans les plus brefs délais.</p>
-      <button class="modal-close" onclick="closeModal()">Fermer</button>
-    </div>
-  </div>
+        /**
+         * Gère le processus de connexion
+         */
+        function login() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
 
-  <!-- BOUTON DE DÉCONNEXION -->
-  <button id="logoutBtn" onclick="logout()">Déconnexion</button>
+            if (!user || !pass) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
 
-  <!-- SCRIPT -->
-  <script>
-    // Données des actualités
-    const newsItems = [
-      "15/06/2025 - Nouvelle mise à jour des terminaux TPE disponible",
-      "01/06/2025 - WebSite developed By SARMOUME_NasrEddine",
-      "20/05/2025 - Nouvelle offre commerciale pour les commerçants",
-      "10/05/2025 - Nos équipes seront présentes au Salon des Commerçants le 25 mai",
-      "28/04/2025 - Mise en place d'un nouveau service client 24/7",
-      "15/04/2025 - Nouveaux tarifs avantageux pour les petits commerces",
-      "01/04/2025 - Application mobile mise à jour avec nouvelles fonctionnalités"
-    ];
+            // Simule la connexion réussie
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('loginHeader').style.display = 'none';
+            document.getElementById('mainHeader').style.display = 'block';
+            document.getElementById('dashboardPage').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'block';
+            document.getElementById('newsContainer').style.display = 'block';
+            
+            // Génère les données des services
+            generateTPEList();
+            generateInvoiceList();
+            generateSupportList();
+            setupNewsTicker();
+        }
 
-    function login() {
-      const user = document.getElementById('username').value.trim();
-      const pass = document.getElementById('password').value.trim();
+        /**
+         * Gère le processus de déconnexion
+         */
+        function logout() {
+            // Retour à la page de connexion
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('loginHeader').style.display = 'block';
+            document.getElementById('mainHeader').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('newsContainer').style.display = 'none';
+            
+            // Cache toutes les pages de service
+            document.querySelectorAll('.service-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Cache le conteneur de RDV
+            document.getElementById('rdvContainer').style.display = 'none';
+            
+            // Réinitialise les champs de connexion
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
 
-      if (user === '' || pass === '') {
-        alert("Veuillez remplir tous les champs.");
-        return;
-      }
+        /**
+         * Affiche une page de service spécifique
+         * @param {string} serviceId - ID de la page de service à afficher
+         */
+        function showService(serviceId) {
+            // Cache le tableau de bord et les news
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('newsContainer').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'none';
+            
+            // Affiche la page du service demandé
+            document.getElementById(serviceId).style.display = 'block';
+            
+            // Cache le conteneur de RDV si on change de page
+            if (serviceId !== 'service3') {
+                document.getElementById('rdvContainer').style.display = 'none';
+            }
+        }
 
-      // Simule la connexion réussie
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('loginHeader').style.display = 'none';
-      document.getElementById('mainHeader').style.display = 'block';
-      document.getElementById('dashboardPage').style.display = 'block';
-      document.getElementById('logoutBtn').style.display = 'block';
-      document.getElementById('newsContainer').style.display = 'block';
-      
-      // Génère les données des services
-      generateTPEList();
-      generateInvoiceList();
-      generateSupportList();
-      setupNewsTicker();
-    }
+        /**
+         * Retourne au tableau de bord
+         */
+        function backToDashboard() {
+            // Cache toutes les pages de service
+            document.querySelectorAll('.service-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Affiche le tableau de bord, les news et le bouton de déconnexion
+            document.getElementById('dashboardPage').style.display = 'block';
+            document.getElementById('newsContainer').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'block';
+            
+            // Cache le conteneur de RDV
+            document.getElementById('rdvContainer').style.display = 'none';
+        }
 
-    function logout() {
-      // Retour à la page de connexion
-      document.getElementById('dashboardPage').style.display = 'none';
-      document.getElementById('loginPage').style.display = 'block';
-      document.getElementById('loginHeader').style.display = 'block';
-      document.getElementById('mainHeader').style.display = 'none';
-      document.getElementById('logoutBtn').style.display = 'none';
-      document.getElementById('newsContainer').style.display = 'none';
-      
-      // Cache toutes les pages de service
-      document.querySelectorAll('.service-page').forEach(page => {
-        page.style.display = 'none';
-      });
-    }
+        /**
+         * Configure le défilement des actualités
+         */
+        function setupNewsTicker() {
+            const newsTicker = document.getElementById('newsTicker');
+            newsTicker.innerHTML = '';
+            
+            // Crée les éléments d'actualités pour le défilement
+            newsItems.forEach(news => {
+                const item = document.createElement('span');
+                item.className = 'news-item';
+                item.textContent = news + ' • '; // Ajoute un séparateur
+                newsTicker.appendChild(item);
+            });
+        }
 
-    function showService(serviceId) {
-      // Cache le tableau de bord et les news
-      document.getElementById('dashboardPage').style.display = 'none';
-      document.getElementById('newsContainer').style.display = 'none';
-      document.getElementById('logoutBtn').style.display = 'none';
-      
-      // Affiche la page du service demandé
-      document.getElementById(serviceId).style.display = 'block';
-    }
+        /**
+         * Génère la liste des TPE
+         */
+        function generateTPEList() {
+            const tpeList = document.getElementById('tpeList');
+            tpeList.innerHTML = '';
+            
+            // Génère 12 TPE (8 connectés, 4 déconnectés)
+            for (let i = 1; i <= 12; i++) {
+                const isConnected = i <= 8;
+                const tpeItem = document.createElement('div');
+                tpeItem.className = 'tpe-item';
+                tpeItem.innerHTML = `
+                    <div>
+                        <span class="status ${isConnected ? 'connected' : 'disconnected'}"></span>
+                        <strong>TPE-${i.toString().padStart(2, '0')}</strong>
+                    </div>
+                    <button class="toggle-btn ${isConnected ? '' : 'off'}" onclick="toggleTPE(this, ${i})">
+                        ${isConnected ? 'ON' : 'OFF'}
+                    </button>
+                `;
+                tpeList.appendChild(tpeItem);
+            }
+        }
 
-    function backToDashboard() {
-      // Cache toutes les pages de service
-      document.querySelectorAll('.service-page').forEach(page => {
-        page.style.display = 'none';
-      });
-      
-      // Affiche le tableau de bord, les news et le bouton de déconnexion
-      document.getElementById('dashboardPage').style.display = 'block';
-      document.getElementById('newsContainer').style.display = 'block';
-      document.getElementById('logoutBtn').style.display = 'block';
-    }
+        /**
+         * Bascule l'état d'un TPE
+         * @param {HTMLElement} button - Bouton cliqué
+         * @param {number} tpeId - ID du TPE
+         */
+        function toggleTPE(button, tpeId) {
+            const isOn = button.textContent.trim() === 'ON';
+            button.textContent = isOn ? 'OFF' : 'ON';
+            button.className = isOn ? 'toggle-btn off' : 'toggle-btn';
+            
+            // Met à jour le point de statut
+            const statusDot = button.parentElement.querySelector('.status');
+            statusDot.className = isOn ? 'status disconnected' : 'status connected';
+            
+            // Ici, vous pourriez ajouter une requête AJAX pour mettre à jour le statut réel du TPE
+            console.log(`TPE ${tpeId} mis à ${isOn ? 'OFF' : 'ON'}`);
+        }
 
-    function setupNewsTicker() {
-      const newsTicker = document.getElementById('newsTicker');
-      newsTicker.innerHTML = '';
-      
-      // Crée les éléments d'actualités pour le défilement
-      newsItems.forEach(news => {
-        const item = document.createElement('span');
-        item.className = 'news-item';
-        item.textContent = news + ' • '; // Ajoute un séparateur
-        newsTicker.appendChild(item);
-      });
-    }
+        /**
+         * Génère la liste des factures
+         */
+        function generateInvoiceList() {
+            const invoiceList = document.getElementById('invoiceList');
+            invoiceList.innerHTML = '';
+            
+            const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            const currentMonth = new Date().getMonth();
+            
+            // Génère les 12 derniers mois de factures
+            for (let i = 0; i < 12; i++) {
+                const monthIndex = (currentMonth - i + 12) % 12;
+                const year = new Date().getFullYear() - (i > currentMonth ? 1 : 0);
+                
+                const invoiceItem = document.createElement('div');
+                invoiceItem.className = 'invoice-item';
+                invoiceItem.innerHTML = `
+                    <div>
+                        <strong>Facture ${months[monthIndex]} ${year}</strong>
+                        <span> - Montant: ${(Math.random() * 500 + 50).toFixed(2)}€</span>
+                    </div>
+                    <button class="download-btn" onclick="downloadInvoice('${months[monthIndex]} ${year}')">
+                        Télécharger
+                    </button>
+                `;
+                invoiceList.appendChild(invoiceItem);
+            }
+        }
 
-    function generateTPEList() {
-      const tpeList = document.getElementById('tpeList');
-      tpeList.innerHTML = '';
-      
-      // Génère 12 TPE (8 connectés, 4 déconnectés)
-      for (let i = 1; i <= 12; i++) {
-        const isConnected = i <= 8;
-        const tpeItem = document.createElement('div');
-        tpeItem.className = 'tpe-item';
-        tpeItem.innerHTML = `
-          <div>
-            <span class="status ${isConnected ? 'connected' : 'disconnected'}"></span>
-            <strong>TPE-${i.toString().padStart(2, '0')}</strong>
-          </div>
-          <button class="toggle-btn ${isConnected ? '' : 'off'}" onclick="toggleTPE(this, ${i})">
-            ${isConnected ? 'ON' : 'OFF'}
-          </button>
-        `;
-        tpeList.appendChild(tpeItem);
-      }
-    }
+        /**
+         * Simule le téléchargement d'une facture
+         * @param {string} monthYear - Mois et année de la facture
+         */
+        function downloadInvoice(monthYear) {
+            console.log(`Téléchargement de la facture ${monthYear}`);
+            alert(`Facture ${monthYear} téléchargée (simulation)`);
+        }
 
-    function toggleTPE(button, tpeId) {
-      const isOn = button.textContent.trim() === 'ON';
-      button.textContent = isOn ? 'OFF' : 'ON';
-      button.className = isOn ? 'toggle-btn off' : 'toggle-btn';
-      
-      // Met à jour le point de statut
-      const statusDot = button.parentElement.querySelector('.status');
-      statusDot.className = isOn ? 'status disconnected' : 'status connected';
-      
-      // Ici, vous pourriez ajouter une requête AJAX pour mettre à jour le statut réel du TPE
-      console.log(`TPE ${tpeId} mis à ${isOn ? 'OFF' : 'ON'}`);
-    }
+        /**
+         * Génère la liste des contacts de support
+         */
+        function generateSupportList() {
+            const supportList = document.getElementById('supportList');
+            supportList.innerHTML = '';
+            
+            const supportNumbers = [
+                {name: "Support technique", number: "01 23 45 67 89"},
+                {name: "Support commercial", number: "01 23 45 67 90"},
+                {name: "Support financier", number: "01 23 45 67 91"},
+                {name: "Urgences techniques", number: "01 23 45 67 92"},
+                {name: "Service après-vente", number: "01 23 45 67 93"},
+                {name: "Service comptabilité", number: "01 23 45 67 94"},
+                {name: "Service marketing", number: "01 23 45 67 95"},
+                {name: "Direction générale", number: "01 23 45 67 96"}
+            ];
+            
+            // Génère les contacts d'assistance
+            supportNumbers.forEach((support) => {
+                const supportItem = document.createElement('div');
+                supportItem.className = 'support-item';
+                supportItem.innerHTML = `
+                    <div>
+                        <strong>${support.name}</strong>
+                        <div>${support.number}</div>
+                    </div>
+                    <button class="call-btn" onclick="callSupport('${support.number}')">
+                        Appeler
+                    </button>
+                `;
+                supportList.appendChild(supportItem);
+            });
+        }
 
-    function generateInvoiceList() {
-      const invoiceList = document.getElementById('invoiceList');
-      invoiceList.innerHTML = '';
-      
-      const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
-                      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-      const currentMonth = new Date().getMonth();
-      
-      // Génère les 12 derniers mois de factures
-      for (let i = 0; i < 12; i++) {
-        const monthIndex = (currentMonth - i + 12) % 12;
-        const year = new Date().getFullYear() - (i > currentMonth ? 1 : 0);
-        
-        const invoiceItem = document.createElement('div');
-        invoiceItem.className = 'invoice-item';
-        invoiceItem.innerHTML = `
-          <div>
-            <strong>Facture ${months[monthIndex]} ${year}</strong>
-            <span> - Montant: ${(Math.random() * 500 + 50).toFixed(2)}€</span>
-          </div>
-          <button class="download-btn" onclick="downloadInvoice('${months[monthIndex]} ${year}')">
-            Télécharger
-          </button>
-        `;
-        invoiceList.appendChild(invoiceItem);
-      }
-    }
+        /**
+         * Initie un appel au support
+         * @param {string} number - Numéro à appeler
+         */
+        function callSupport(number) {
+            currentSupportNumber = number;
+            document.getElementById('urgentCallModal').style.display = 'flex';
+        }
 
-    function downloadInvoice(monthYear) {
-      // Simule le téléchargement d'une facture
-      console.log(`Téléchargement de la facture ${monthYear}`);
-      alert(`Facture ${monthYear} téléchargée (simulation)`);
-    }
+        /**
+         * Gère la réponse à la question d'urgence
+         * @param {boolean} isUrgent - Si l'appel est urgent ou non
+         */
+        function handleUrgentCall(isUrgent) {
+            document.getElementById('urgentCallModal').style.display = 'none';
+            
+            if (isUrgent) {
+                // Si c'est urgent, compose directement le numéro
+                alert(`Appel urgent en cours vers: ${currentSupportNumber}`);
+            } else {
+                // Si ce n'est pas urgent, affiche les créneaux RDV
+                document.getElementById('rdvContainer').style.display = 'block';
+                generateRdvSlots();
+            }
+        }
 
-    function generateSupportList() {
-      const supportList = document.getElementById('supportList');
-      supportList.innerHTML = '';
-      
-      const supportNumbers = [
-        {name: "Support technique", number: "01 23 45 67 89"},
-        {name: "Support commercial", number: "01 23 45 67 90"},
-        {name: "Support financier", number: "01 23 45 67 91"},
-        {name: "Urgences techniques", number: "01 23 45 67 92"},
-        {name: "Service après-vente", number: "01 23 45 67 93"},
-        {name: "Service comptabilité", number: "01 23 45 67 94"},
-        {name: "Service marketing", number: "01 23 45 67 95"},
-        {name: "Direction générale", number: "01 23 45 67 96"}
-      ];
-      
-      // Génère les contacts d'assistance
-      supportNumbers.forEach((support, index) => {
-        const supportItem = document.createElement('div');
-        supportItem.className = 'support-item';
-        supportItem.innerHTML = `
-          <div>
-            <strong>${support.name}</strong>
-            <div>${support.number}</div>
-          </div>
-          <button class="call-btn" onclick="callSupport('${support.number}')">
-            Appeler
-          </button>
-        `;
-        supportList.appendChild(supportItem);
-      });
-    }
+        /**
+         * Génère les créneaux de rendez-vous disponibles
+         */
+        function generateRdvSlots() {
+            const slotsContainer = document.getElementById('rdvSlots');
+            slotsContainer.innerHTML = '';
+            selectedRdvSlot = null;
+            document.getElementById('rdvConfirmation').style.display = 'none';
+            
+            // Génère des créneaux pour aujourd'hui (toutes les 30 minutes de 9h à 18h)
+            const startHour = 9;
+            const endHour = 18;
+            
+            let currentHour = startHour;
+            
+            while (currentHour < endHour) {
+                const slot = document.createElement('div');
+                slot.className = 'rdv-slot';
+                
+                // Formatage de l'heure (09:00, 09:30, etc.)
+                const hours = Math.floor(currentHour).toString().padStart(2, '0');
+                const minutes = (currentHour % 1 === 0.5) ? '30' : '00';
+                slot.textContent = `${hours}:${minutes}`;
+                slot.dataset.time = `${hours}:${minutes}`;
+                
+                slot.onclick = function() {
+                    // Désélectionner le précédent
+                    if (selectedRdvSlot) {
+                        selectedRdvSlot.classList.remove('selected');
+                    }
+                    
+                    // Sélectionner le nouveau
+                    this.classList.add('selected');
+                    selectedRdvSlot = this;
+                    document.getElementById('rdvConfirmation').style.display = 'none';
+                };
+                
+                slotsContainer.appendChild(slot);
+                
+                // Passer au prochain créneau (+30 minutes)
+                currentHour += 0.5;
+            }
+        }
 
-    function callSupport(number) {
-      // Simule un appel téléphonique
-      console.log(`Appel du support: ${number}`);
-      alert(`Appel vers ${number} (simulation)`);
-    }
+        /**
+         * Confirme le rendez-vous
+         */
+        function confirmRdv() {
+            if (!selectedRdvSlot) {
+                alert('Veuillez sélectionner un créneau');
+                return;
+            }
+            
+            const confirmationDiv = document.getElementById('rdvConfirmation');
+            confirmationDiv.innerHTML = `
+                <p>Rendez-vous confirmé pour ${selectedRdvSlot.dataset.time}</p>
+                <p>Avec le service: ${currentSupportNumber}</p>
+            `;
+            confirmationDiv.style.display = 'block';
+            
+            // Réinitialiser après 3 secondes
+            setTimeout(() => {
+                document.getElementById('rdvContainer').style.display = 'none';
+                confirmationDiv.style.display = 'none';
+            }, 3000);
+        }
 
-    function sendContactForm() {
-      const name = document.getElementById('contact-name').value.trim();
-      const email = document.getElementById('contact-email').value.trim();
-      const subject = document.getElementById('contact-subject').value.trim();
-      const message = document.getElementById('contact-message').value.trim();
+        /**
+         * Envoie le formulaire de contact
+         */
+        function sendContactForm() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const subject = document.getElementById('contact-subject').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
 
-      if (!name || !email || !subject || !message) {
-        alert("Veuillez remplir tous les champs du formulaire.");
-        return;
-      }
+            if (!name || !email || !subject || !message) {
+                alert("Veuillez remplir tous les champs du formulaire.");
+                return;
+            }
 
-      // Ici, normalement vous auriez un appel AJAX pour envoyer le formulaire
-      console.log("Message envoyé :", {name, email, subject, message});
-      
-      // Affiche la modal de confirmation
-      document.getElementById('confirmationModal').style.display = 'flex';
-      
-      // Réinitialise le formulaire
-      document.getElementById('contact-name').value = '';
-      document.getElementById('contact-email').value = '';
-      document.getElementById('contact-subject').value = '';
-      document.getElementById('contact-message').value = '';
-    }
+            // Validation basique de l'email
+            if (!email.includes('@') || !email.includes('.')) {
+                alert("Veuillez entrer une adresse email valide.");
+                return;
+            }
 
-    function closeModal() {
-      document.getElementById('confirmationModal').style.display = 'none';
-    }
-  </script>
+            // Ici, normalement vous auriez un appel AJAX pour envoyer le formulaire
+            console.log("Message envoyé :", {name, email, subject, message});
+            
+            // Affiche la modal de confirmation
+            document.getElementById('confirmationModal').style.display = 'flex';
+            
+            // Réinitialise le formulaire
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-subject').value = '';
+            document.getElementById('contact-message').value = '';
+        }
 
+        /**
+         * Ferme la modal
+         */
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        // Écouteur d'événement pour la touche Entrée sur le formulaire de connexion
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
 </body>
 </html>
